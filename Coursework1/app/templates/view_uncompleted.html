@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Uncompleted Assessments</h1>
+  <ul>
+    {% for assessment in assessments %}
+      <li>{{ assessment.title }} - {{ assessment.module_code }} - {{ assessment.deadline_date }} - Not Completed</li>
+    {% endfor %}
+  </ul>
+  <a href="{{ url_for('index') }}" class="btn btn-primary">Back to All Assessments</a>
+{% endblock %}
