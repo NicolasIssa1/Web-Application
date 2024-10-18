@@ -2,6 +2,7 @@ from app import app, db
 from flask import render_template, redirect, url_for, flash
 from app.forms import AssessmentForm
 from app.models import Assessment
+from flask import request
 
 @app.route('/')
 def index():
@@ -29,6 +30,10 @@ def add_assessment():
 def edit_assessment(assessment_id):
     assessment = Assessment.query.get_or_404(assessment_id)
     form = AssessmentForm(obj=assessment)
+
+    # Get the 'next' parameter to redirect to the referring page after editing
+    next_page = request.args.get('next', 'index')  # Defaults to 'index' if no 'next' is provided
+
     if form.validate_on_submit():
         assessment.title = form.title.data
         assessment.module_code = form.module_code.data
@@ -37,7 +42,9 @@ def edit_assessment(assessment_id):
         assessment.is_complete = form.is_complete.data
         db.session.commit()
         flash('Assessment updated successfully!')
-        return redirect(url_for('index'))
+        # Redirect to the previous view after updating the assessment
+        return redirect(url_for(next_page))
+
     return render_template('edit_assessment.html', title='Edit Assessment', form=form, assessment=assessment)
 
 @app.route('/delete/<int:assessment_id>', methods=['POST'])
@@ -55,8 +62,7 @@ def mark_complete(assessment_id):
         assessment.is_complete = True
         db.session.commit()
         flash(f'Assessment "{assessment.title}" marked as complete!')
-    return redirect(url_for('view_uncompleted'))
-
+    return redirect(request.referrer)
 
 @app.route('/view_completed')
 def view_completed():

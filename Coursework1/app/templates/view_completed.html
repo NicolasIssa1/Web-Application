@@ -3,19 +3,26 @@
   <h1>Completed Assessments</h1>
   <div class="assessment-list">
     {% if assessments %}
-      {% for assessment in assessments %}
-        <div class="assessment-item">
-          <h3>{{ assessment.title }}</h3>
-          <p><strong>Module Code:</strong> {{ assessment.module_code }}</p>
-          <p><strong>Deadline:</strong> {{ assessment.deadline_date.strftime('%d-%m-%Y') }}</p>
-          <p><strong>Description:</strong> {{ assessment.description }}</p>
-          <p><strong>Status:</strong> Completed</p>
-          <a href="{{ url_for('edit_assessment', assessment_id=assessment.id) }}" class="btn btn-secondary">Edit</a>
-          <form action="{{ url_for('delete_assessment', assessment_id=assessment.id) }}" method="post" style="display:inline;">
-            <button type="submit" class="btn btn-danger">Delete</button>
-          </form>
-        </div>
-      {% endfor %}
+      <div class="row">
+        {% for assessment in assessments %}
+          <div class="col-md-6 mb-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">{{ assessment.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Module Code: {{ assessment.module_code }}</h6>
+                <p class="card-text">Deadline: {{ assessment.deadline_date.strftime('%d-%m-%Y') }}</p>
+                <p class="card-text">Description: {{ assessment.description }}</p>
+                <p class="card-text"><strong>Status:</strong> Completed</p>
+                <!-- Edit button with next parameter to redirect back to the current page -->
+                <a href="{{ url_for('edit_assessment', assessment_id=assessment.id, next=request.endpoint) }}" class="btn btn-secondary btn-sm mr-2">Edit</a>
+                <form action="{{ url_for('delete_assessment', assessment_id=assessment.id) }}" method="post" style="display:inline;">
+                  <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
     {% else %}
       <div class="alert alert-info">
         <p>All assessments are currently incomplete.</p>
