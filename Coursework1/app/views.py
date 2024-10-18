@@ -55,14 +55,15 @@ def mark_complete(assessment_id):
         assessment.is_complete = True
         db.session.commit()
         flash(f'Assessment "{assessment.title}" marked as complete!')
-    return redirect(url_for('index'))
+    return redirect(url_for('view_uncompleted'))
+
 
 @app.route('/view_completed')
 def view_completed():
     completed_assessments = Assessment.query.filter_by(is_complete=True).all()
-    return render_template('view_assessments.html', title='Completed Assessments', assessments=completed_assessments)
+    return render_template('view_completed.html', title='Completed Assessments', assessments=completed_assessments)
 
 @app.route('/view_uncompleted')
 def view_uncompleted():
     uncompleted_assessments = Assessment.query.filter_by(is_complete=False).all()
-    return render_template('view_assessments.html', title='Uncompleted Assessments', assessments=uncompleted_assessments)
+    return render_template('view_uncompleted.html', title='Uncompleted Assessments', assessments=uncompleted_assessments)
