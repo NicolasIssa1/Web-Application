@@ -1,79 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
 {% extends "base.html" %}
 {% block content %}
-  <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <title>Edit Assessment</title>
-    </head>
-    <body>
-      <h1>Edit Assessment</h1>
-      <form method="post" action="{{ url_for('edit_assessment', assessment_id=assessment.id) }}">
-        {{ form.hidden_tag() }}
-
-        <div class="form-group">
-          {{ form.title.label }}
-          {{ form.title(class_="form-control") }}
-          {% if form.title.errors %}
-            <ul class="errors">
+  <h1>Edit Assessment</h1>
+  <form method="post" action="{{ url_for('edit_assessment', assessment_id=assessment.id) }}">
+    {{ form.hidden_tag() }}
+    
+    <div class="form-group">
+        {{ form.title.label }} 
+        {{ form.title(class_="form-control") }}
+        {% if form.title.errors %}
+          <ul class="errors">
               {% for error in form.title.errors %}
-                <li>{{ error }}</li>
+                  <li>{{ error }}</li>
               {% endfor %}
-            </ul>
-          {% endif %}
-        </div>
+          </ul>
+        {% endif %}
+    </div>
 
-        <div class="form-group">
-          {{ form.module_code.label }}
-          {{ form.module_code(class_="form-control") }}
-          {% if form.module_code.errors %}
-            <ul class="errors">
+    <div class="form-group">
+        {{ form.module_code.label }} 
+        {{ form.module_code(class_="form-control") }}
+        {% if form.module_code.errors %}
+          <ul class="errors">
               {% for error in form.module_code.errors %}
-                <li>{{ error }}</li>
+                  <li>{{ error }}</li>
               {% endfor %}
-            </ul>
-          {% endif %}
-        </div>
+          </ul>
+        {% endif %}
+    </div>
 
-        <div class="form-group">
-          {{ form.deadline_date.label }}
-          {{ form.deadline_date(class_="form-control") }}
-          {% if form.deadline_date.errors %}
-            <ul class="errors">
+    <div class="form-group">
+        {{ form.deadline_date.label }} 
+        {{ form.deadline_date(class_="form-control") }}
+        {% if form.deadline_date.errors %}
+          <ul class="errors">
               {% for error in form.deadline_date.errors %}
-                <li>{{ error }}</li>
+                  <li>{{ error }}</li>
               {% endfor %}
-            </ul>
-          {% endif %}
-        </div>
+          </ul>
+        {% endif %}
+    </div>
 
-        <div class="form-group">
-          {{ form.description.label }}
-          {{ form.description(class_="form-control") }}
-          {% if form.description.errors %}
-            <ul class="errors">
+    <div class="form-group">
+        {{ form.description.label }} 
+        {{ form.description(class_="form-control") }}
+        {% if form.description.errors %}
+          <ul class="errors">
               {% for error in form.description.errors %}
-                <li>{{ error }}</li>
+                  <li>{{ error }}</li>
               {% endfor %}
-            </ul>
-          {% endif %}
-        </div>
+          </ul>
+        {% endif %}
+    </div>
 
-        <div class="form-group">
-          {{ form.is_complete.label }}
-          {{ form.is_complete() }}
-          {% if form.is_complete.errors %}
-            <ul class="errors">
+    <div class="form-group">
+        {{ form.is_complete.label }} 
+        {{ form.is_complete() }}
+        {% if form.is_complete.errors %}
+          <ul class="errors">
               {% for error in form.is_complete.errors %}
-                <li>{{ error }}</li>
+                  <li>{{ error }}</li>
               {% endfor %}
-            </ul>
-          {% endif %}
-        </div>
+          </ul>
+        {% endif %}
+    </div>
 
-        <button type="submit" class="btn btn-primary">Update Assessment</button>
-      </form>
-    </body>
-  </html>
+    <button type="submit" class="btn btn-primary">Update Assessment</button>
+  </form>
 {% endblock %}
+
+</html>
