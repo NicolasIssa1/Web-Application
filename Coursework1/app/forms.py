@@ -1,7 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, DateField, TextAreaField, BooleanField, SubmitField, ValidationError
+from wtforms import StringField, DateField, TextAreaField
+from wtforms import BooleanField, SubmitField, ValidationError
 from wtforms.validators import DataRequired
 from datetime import datetime
+
 
 class AssessmentForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
