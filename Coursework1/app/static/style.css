@@ -96,7 +96,7 @@ body {
     margin-top: 20px;
   }
   
-  /* Additional Hover Effects for Links */
+  /* Hover Effects for Links */
   a {
     color: #007bff;
     text-decoration: none;
@@ -146,6 +146,6 @@ body {
 }
 
 .btn-add-new:hover {
-    background-color: #0056b3; /* Darker blue on hover */
+    background-color: #0056b3;
     color: white;
 }
