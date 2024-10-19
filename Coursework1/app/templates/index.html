@@ -3,30 +3,30 @@
 {% extends "base.html" %}
 {% block content %}
   <h1>All Assessments</h1>
-  <div class="assessment-list">
+  <div class="assessment-list" role="main" aria-labelledby="assessment-list">
     {% if assessments %}
       <div class="row">
         {% for assessment in assessments %}
           <div class="col-md-6 mb-4">
             <div class="card">
               <div class="card-body">
-                <h5 class="card-title">{{ assessment.title }}</h5>
+                <h5 class="card-title" id="assessment-title-{{ assessment.id }}">{{ assessment.title }}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">Module Code: {{ assessment.module_code }}</h6>
                 <p class="card-text">Deadline: {{ assessment.deadline_date.strftime('%d-%m-%Y') }}</p>
                 <p class="card-text">Description: {{ assessment.description }}</p>
                 <p class="card-text"><strong>Status:</strong> {{ 'Completed' if assessment.is_complete else 'Not Completed' }}</p>
-                <a href="{{ url_for('edit_assessment', assessment_id=assessment.id) }}" class="btn btn-secondary btn-sm mr-2">Edit</a>
+                <a href="{{ url_for('edit_assessment', assessment_id=assessment.id) }}" class="btn btn-secondary btn-sm mr-2" aria-label="Edit {{ assessment.title }}">Edit</a>
                 <form action="{{ url_for('delete_assessment', assessment_id=assessment.id) }}" method="post" style="display:inline;">
-                  <button type="submit" class="btn btn-danger btn-sm mr-2">Delete</button>
+                  <button type="submit" class="btn btn-danger btn-sm mr-2" aria-label="Delete {{ assessment.title }}">Delete</button>
                 </form>
                 {% if not assessment.is_complete %}
                   <form action="{{ url_for('mark_complete', assessment_id=assessment.id) }}" method="post" style="display:inline;">
-                    <button type="submit" class="btn btn-success btn-sm">Mark as Complete</button>
+                    <button type="submit" class="btn btn-success btn-sm" aria-label="Mark {{ assessment.title }} as Complete">Mark as Complete</button>
                   </form>
                 {% else %}
-                <form action="{{ url_for('mark_incomplete', assessment_id=assessment.id) }}" method="post" style="display:inline;">
-                  <button type="submit" class="btn btn-sm" style="background-color: #000000 !important; color: #ffffff;">Mark as Incomplete</button>
-              </form>              
+                <form action="{{ url_for('mark_incomplete', assessment_id=assessment.id) }}?next=index" method="post" style="display:inline;">
+                  <button type="submit" class="btn btn-sm" style="background-color: #000000 !important; color: #ffffff;" aria-label="Mark {{ assessment.title }} as Incomplete">Mark as Incomplete</button>
+                </form>
                 {% endif %}
               </div>
             </div>
@@ -40,5 +40,4 @@
     {% endif %}
   </div>
 {% endblock %}
-
 </html>

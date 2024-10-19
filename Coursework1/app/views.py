@@ -101,8 +101,14 @@ def view_uncompleted():
 # Route to mark an assessment as incomplete
 @app.route('/mark_incomplete/<int:assessment_id>', methods=['POST'])
 def mark_incomplete(assessment_id):
+    # Logic to mark the assessment as incomplete
     assessment = Assessment.query.get_or_404(assessment_id)
     assessment.is_complete = False
     db.session.commit()
-    flash(f'Assessment "{assessment.title}" marked as incomplete!')
-    return redirect(url_for('view_completed'))
+
+    # Determine where to redirect after marking incomplete
+    next_page = request.args.get('next')
+    if next_page:
+        return redirect(url_for(next_page))
+    else:
+        return redirect(url_for('index'))

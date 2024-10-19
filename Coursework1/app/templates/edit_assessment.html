@@ -3,14 +3,14 @@
 {% extends "base.html" %}
 {% block content %}
   <h1>Edit Assessment</h1>
-  <form method="post" action="{{ url_for('edit_assessment', assessment_id=assessment.id) }}">
+  <form method="post" action="{{ url_for('edit_assessment', assessment_id=assessment.id) }}" aria-labelledby="edit-assessment">
     {{ form.hidden_tag() }}
     
     <div class="form-group">
-        {{ form.title.label }} 
-        {{ form.title(class_="form-control") }}
+        <label for="title" aria-label="Assessment Title">{{ form.title.label }}</label>
+        {{ form.title(class_="form-control", id="title") }}
         {% if form.title.errors %}
-          <ul class="errors">
+          <ul class="errors" role="alert" aria-live="polite">
               {% for error in form.title.errors %}
                   <li>{{ error }}</li>
               {% endfor %}
@@ -19,10 +19,10 @@
     </div>
 
     <div class="form-group">
-        {{ form.module_code.label }} 
-        {{ form.module_code(class_="form-control") }}
+        <label for="module_code" aria-label="Module Code">{{ form.module_code.label }}</label>
+        {{ form.module_code(class_="form-control", id="module_code") }}
         {% if form.module_code.errors %}
-          <ul class="errors">
+          <ul class="errors" role="alert" aria-live="polite">
               {% for error in form.module_code.errors %}
                   <li>{{ error }}</li>
               {% endfor %}
@@ -31,10 +31,10 @@
     </div>
 
     <div class="form-group">
-        {{ form.deadline_date.label }} 
-        {{ form.deadline_date(class_="form-control") }}
+        <label for="deadline_date" aria-label="Deadline Date">{{ form.deadline_date.label }}</label>
+        {{ form.deadline_date(class_="form-control", id="deadline_date") }}
         {% if form.deadline_date.errors %}
-          <ul class="errors">
+          <ul class="errors" role="alert" aria-live="polite">
               {% for error in form.deadline_date.errors %}
                   <li>{{ error }}</li>
               {% endfor %}
@@ -43,10 +43,10 @@
     </div>
 
     <div class="form-group">
-        {{ form.description.label }} 
-        {{ form.description(class_="form-control") }}
+        <label for="description" aria-label="Description">{{ form.description.label }}</label>
+        {{ form.description(class_="form-control", id="description") }}
         {% if form.description.errors %}
-          <ul class="errors">
+          <ul class="errors" role="alert" aria-live="polite">
               {% for error in form.description.errors %}
                   <li>{{ error }}</li>
               {% endfor %}
@@ -55,10 +55,10 @@
     </div>
 
     <div class="form-group">
-        {{ form.is_complete.label }} 
-        {{ form.is_complete() }}
+        <label for="is_complete" aria-label="Completion Status">{{ form.is_complete.label }}</label>
+        {{ form.is_complete(id="is_complete") }}
         {% if form.is_complete.errors %}
-          <ul class="errors">
+          <ul class="errors" role="alert" aria-live="polite">
               {% for error in form.is_complete.errors %}
                   <li>{{ error }}</li>
               {% endfor %}
