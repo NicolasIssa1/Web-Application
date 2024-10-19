@@ -23,6 +23,10 @@
                   <form action="{{ url_for('mark_complete', assessment_id=assessment.id) }}" method="post" style="display:inline;">
                     <button type="submit" class="btn btn-success btn-sm">Mark as Complete</button>
                   </form>
+                {% else %}
+                <form action="{{ url_for('mark_incomplete', assessment_id=assessment.id) }}" method="post" style="display:inline;">
+                  <button type="submit" class="btn btn-sm" style="background-color: #000000 !important; color: #ffffff;">Mark as Incomplete</button>
+              </form>              
                 {% endif %}
               </div>
             </div>

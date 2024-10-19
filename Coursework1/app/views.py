@@ -3,6 +3,7 @@ from flask import render_template, redirect, url_for, flash
 from app.forms import AssessmentForm
 from app.models import Assessment
 from flask import request
+from flask import flash, redirect, url_for
 
 # Route for our homepage displaying all the assesments
 @app.route('/')
@@ -96,3 +97,12 @@ def view_completed():
 def view_uncompleted():
     uncompleted_assessments = Assessment.query.filter_by(is_complete=False).all()
     return render_template('view_uncompleted.html', title='Uncompleted Assessments', assessments=uncompleted_assessments)
+
+# Route to mark an assessment as incomplete
+@app.route('/mark_incomplete/<int:assessment_id>', methods=['POST'])
+def mark_incomplete(assessment_id):
+    assessment = Assessment.query.get_or_404(assessment_id)
+    assessment.is_complete = False
+    db.session.commit()
+    flash(f'Assessment "{assessment.title}" marked as incomplete!')
+    return redirect(url_for('view_completed'))
