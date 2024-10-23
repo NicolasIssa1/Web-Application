@@ -2,7 +2,7 @@
 <html lang="en">
 {% extends "base.html" %}
 {% block content %}
-  <h1>Add Assessment</h1>
+  <h1><strong>Add Assessment</strong></h1>
   <form method="post" action="{{ url_for('add_assessment') }}">
     {{ form.hidden_tag() }}
     
@@ -68,6 +68,12 @@
 
     <button type="submit" class="btn btn-primary">Add Assessment</button>
   </form>
-{% endblock %}
 
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const today = new Date().toISOString().split('T')[0];
+      document.querySelector('input[type="date"]').setAttribute('min', today);
+    });
+  </script>
+{% endblock %}
 </html>
