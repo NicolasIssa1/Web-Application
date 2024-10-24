@@ -12,29 +12,34 @@ def index():
     assessments = Assessment.query.all()
     return render_template('index.html', title='All Assessments', assessments=assessments)
 
-# Route to add a new assesment
+# Route to add a new assessment
 @app.route('/add', methods=['GET', 'POST'])
 def add_assessment():
     form = AssessmentForm()
+    duplicate_title = False
+
     if form.validate_on_submit():
-        new_assessment = Assessment(
-            title=form.title.data,
-            module_code=form.module_code.data,
-            deadline_date=form.deadline_date.data,
-            description=form.description.data,
-            is_complete=form.is_complete.data
-        )
-        # this function is to add the new assesment to the 
-        # database session
-        db.session.add(new_assessment)
-        
-        # and this one is to commit the session to save the assesment
-        db.session.commit()
-        flash('Assessment added successfully!')
-        # Once the assesment is added, we redirect to the homepage
-        # to view all the updated assessments.
-        return redirect(url_for('index'))
-    return render_template('add_assessment.html', title='Add Assessment', form=form)
+        # Check if an assessment with the same title already exists
+        existing_assessment = Assessment.query.filter_by(title=form.title.data).first()
+        if existing_assessment:
+            duplicate_title = True
+        else:
+            # Add the new assessment to the database
+            new_assessment = Assessment(
+                title=form.title.data,
+                module_code=form.module_code.data,
+                deadline_date=form.deadline_date.data,
+                description=form.description.data,
+                is_complete=form.is_complete.data
+            )
+            db.session.add(new_assessment)
+            db.session.commit()
+            flash('Assessment added successfully!')
+            return redirect(url_for('index'))
+
+    return render_template('add_assessment.html', title='Add Assessment', form=form, duplicate_title=duplicate_title)
+
+
 
 # Route to edit an existing assessment. 
 @app.route('/edit/<int:assessment_id>', methods=['GET', 'POST'])

@@ -1,6 +1,6 @@
 body, html {
-  height: 100%;  /* Ensures the background covers the entire page height */
-  margin: 0;     /* Removes any default margin that could create inconsistencies */
+  height: 100%;  
+  margin: 0;
 }
 
 body {
@@ -15,7 +15,7 @@ body {
 
 .background-wrapper {
   position: relative;
-  height: 100%;  /* Makes the background cover the entire page */
+  height: 100%; 
 }
 
 .background-wrapper::before {
@@ -25,15 +25,17 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.5); /* White overlay with 50% transparency */
-  z-index: 0; /* Ensure it stays behind other content */
+  background-color: rgba(255, 255, 255, 0.5); 
+  z-index: 0; 
 }
+
+
 
 .container,
 .navbar,
 .card {
   position: relative;
-  z-index: 1; /* Ensures these elements are above the background */
+  z-index: 1; 
 }
 
 /* Card Styling */

@@ -6,6 +6,13 @@
   <form method="post" action="{{ url_for('add_assessment') }}">
     {{ form.hidden_tag() }}
     
+    
+    <div class="alert alert-warning" role="alert">
+      {% if form.title.data and duplicate_title %}
+        An assessment with the same title already exists. Please choose a different title.
+      {% endif %}
+    </div>
+
     <div class="form-group">
         <label for="title" aria-label="Assessment Title">{{ form.title.label }}</label>
         {{ form.title(class_="form-control", id="title") }}
@@ -72,8 +79,27 @@
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const today = new Date().toISOString().split('T')[0];
-      document.querySelector('input[type="date"]').setAttribute('min', today);
+      const dateInput = document.querySelector('input[type="date"]');
+      dateInput.setAttribute('min', today);
+
+      // Add styles to disable past dates and make them less clear
+      dateInput.addEventListener('focus', function () {
+        this.classList.add('past-dates-disabled');
+      });
     });
   </script>
+
+  <style>
+    input[type="date"]::-webkit-datetime-edit {
+      opacity: 0.5;
+    }
+    input[type="date"]:invalid {
+      color: #aaa;
+    }
+    .past-dates-disabled::-webkit-calendar-picker-indicator {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+  </style>
 {% endblock %}
 </html>
