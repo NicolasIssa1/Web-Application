@@ -1,5 +1,6 @@
 from app import db
 
+
 # This will be the database model for the assessments
 class Assessment(db.Model):
     id = db.Column(db.Integer, primary_key=True)

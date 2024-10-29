@@ -15,6 +15,6 @@ class AssessmentForm(FlaskForm):
     submit = SubmitField('Submit')
 
     def validate_deadline_date(self, deadline_date):
-        #in case the deadline date is in the past, raise an error
+        # in case the deadline date is in the past, raise an error
         if deadline_date.data < datetime.today().date():
             raise ValidationError('The deadline date cannot be in the past.')
