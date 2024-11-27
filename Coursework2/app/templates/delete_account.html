@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Account{% endblock %}
+
+{% block content %}
+<h2>Delete Account</h2>
+<p>
+    Are you sure you want to delete your account? This action cannot be undone.
+    To confirm, please type: <strong>Delete-{{ user.name }}</strong>
+</p>
+
+<form method="POST">
+    <div class="form-group">
+        <label for="confirm_text">Confirmation Text</label>
+        <input type="text" class="form-control" id="confirm_text" name="confirm_text" required>
+    </div>
+    <button type="submit" class="btn btn-danger mt-3">Delete Account</button>
+</form>
+<a href="{{ url_for('profile') }}" class="btn btn-secondary mt-3">Cancel</a>
+{% endblock %}
