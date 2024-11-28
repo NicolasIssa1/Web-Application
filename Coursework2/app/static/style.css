@@ -1,43 +1,229 @@
+/* General Styling */
 body {
     font-family: Arial, sans-serif;
+    background-color: #f3f2ef; /* LinkedIn background gray */
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensures the footer stays at the bottom */
+}
+
+h2 {
+    font-weight: bold;
+    color: #0073b1; /* LinkedIn blue */
+    text-align: center;
+    margin-top: 10px; /* Reduced the top margin to bring content higher */
+}
+
+/* Navigation Bar */
+.navbar {
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd;
+    padding: 15px 20px;
+    font-size: 18px; /* Increased font size */
 }
 
 .navbar-brand {
+    color: #0073b1;
+    font-size: 28px; /* Enlarged brand text */
     font-weight: bold;
 }
 
 .navbar-nav .nav-link {
-    margin-right: 10px;
+    color: #555;
+    font-size: 18px; /* Increased font size */
+    margin-right: 15px;
+    transition: all 0.3s;
 }
 
-.container {
-    max-width: 960px;
-}
-
-nav ul {
-    list-style-type: none;
-    padding: 0;
-    display: flex;
-    gap: 20px;
-    background-color: #f8f9fa;
-    padding: 10px;
-}
-
-nav ul li {
-    display: inline;
-}
-
-nav ul li a {
-    text-decoration: none;
+.navbar-nav .nav-link:hover {
     color: #0073b1;
-    font-weight: bold;
-}
-
-nav ul li a:hover {
     text-decoration: underline;
 }
 
-.text-danger {
-    font-size: 0.9rem;
-    margin-top: 0.25rem;
+/* Buttons */
+.btn {
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-primary {
+    background-color: #0073b1;
+    border: none;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #005580;
+}
+
+.btn-secondary {
+    background-color: #ccc;
+    border: none;
+    color: #333;
+}
+
+.btn-secondary:hover {
+    background-color: #aaa;
+}
+
+/* Profile Page */
+.container {
+    margin: 10px auto; /* Reduced margin to bring content higher */
+    max-width: 800px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    flex: 1; /* Ensures content takes available height */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Profile Picture */
+.profile-picture {
+    display: block;
+    margin: 15px auto; /* Adjusted to reduce space */
+    border-radius: 50%;
+    width: 150px; /* Enlarged size */
+    height: 150px;
+    object-fit: cover;
+    border: 3px solid #0073b1;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.profile-picture:hover {
+    transform: scale(1.15);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Cover Photo */
+.cover-photo {
+    display: block;
+    width: 100%;
+    max-height: 250px; /* Reduced height to save space */
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.cover-photo:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Modal Styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%; /* Adjusted width for larger pictures */
+    max-width: 600px; /* Maximum width */
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    z-index: 1050; /* Higher than overlay */
+    text-align: center;
+    padding: 20px;
+    opacity: 0; /* Hidden initially */
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.modal img {
+    width: 100%; /* Full width inside the modal */
+    border-radius: 10px;
+    object-fit: cover;
+    transition: transform 0.3s ease-in-out;
+}
+
+.modal.active {
+    display: block;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.modal img:hover {
+    transform: scale(1.05); /* Slight zoom on hover */
+}
+
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dark background */
+    z-index: 1040; /* Below modal */
+    display: none;
+    opacity: 0; /* Hidden initially */
+    transition: opacity 0.3s ease-in-out;
+}
+
+.modal-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+/* Flash Messages */
+.alert {
+    margin: 15px auto;
+    max-width: 800px;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+footer {
+    background-color: #ffffff !important;
+    color: #666 !important;
+    text-align: center !important;
+    padding: 0 !important; /* Set to 0 and marked as important */
+    border-top: 1px solid #ddd !important;
+    font-size: 14px !important;
+    margin-top: auto !important;
+    flex-shrink: 0 !important; /* Ensures it doesn't overlap content */
+    position: relative !important;
+}
+
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .container {
+        margin: 10px;
+        padding: 10px;
+    }
+
+    .navbar-brand {
+        font-size: 20px;
+    }
+
+    .btn {
+        font-size: 14px;
+    }
+}
+
+#skills_container .badge {
+    font-size: 14px;
+    padding: 8px;
+    display: inline-block;
+    margin: 5px 2px;
+}
+
+.progress-bar {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 25px;
 }

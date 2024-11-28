@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, TextAreaField, FileField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Length, Regexp
 from app.models import User
+from flask_wtf.file import FileAllowed
 
 class RegistrationForm(FlaskForm):
     name = StringField("Name", validators=[DataRequired(), Length(min=2, max=150)])
@@ -28,10 +29,11 @@ class LoginForm(FlaskForm):
     submit = SubmitField("Login")
 
 class ProfileForm(FlaskForm):
-    name = StringField("Name", validators=[DataRequired(), Length(min=2, max=150)])
-    bio = TextAreaField("Bio")
-    education = TextAreaField("Education")
-    skills = TextAreaField("Skills")
-    work_experience = TextAreaField("Work Experience")
-    profile_pic = FileField("Profile Picture")
-    submit = SubmitField("Update Profile")
+    name = StringField('Name', validators=[DataRequired(), Length(min=2, max=150)])
+    bio = TextAreaField('Bio', validators=[Length(max=500)])
+    education = TextAreaField('Education', validators=[Length(max=500)])
+    skills = TextAreaField('Skills', validators=[Length(max=500)])
+    work_experience = TextAreaField('Work Experience', validators=[Length(max=1000)])
+    profile_pic = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'], "Images only!")])
+    cover_photo = FileField('Update Cover Photo', validators=[FileAllowed(['jpg', 'png'], "Images only!")])  # New field
+    submit = SubmitField('Update Profile')
