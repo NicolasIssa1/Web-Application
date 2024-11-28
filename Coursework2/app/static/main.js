@@ -44,12 +44,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Modal for Viewing Profile Picture
     const viewProfilePictureBtn = document.getElementById("view-profile-picture-btn");
-    const profilePictureModal = new bootstrap.Modal(document.getElementById("profile-picture-modal"));
+    const profilePictureModalElement = document.getElementById("profile-picture-modal");
 
-    if (viewProfilePictureBtn && profilePictureModal) {
+    if (viewProfilePictureBtn && profilePictureModalElement) {
         console.log("View Profile Picture button and modal found.");
+        const profilePictureModal = new bootstrap.Modal(profilePictureModalElement);
 
-        // Open the modal when the button is clicked
         viewProfilePictureBtn.addEventListener("click", () => {
             profilePictureModal.show();
         });
@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("View Profile Picture button or modal not found.");
     }
 
-    // Live character counter for profile fields
+    // Live Character Counter for Profile Fields
     const textareas = document.querySelectorAll("textarea");
     if (textareas.length > 0) {
         console.log(`${textareas.length} textarea(s) found.`);
@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("No textareas found.");
     }
 
-    // Enable or disable the Update Profile button
+    // Enable or Disable the Update Profile Button
     const profileForm = document.querySelector("#profile_form");
     if (profileForm) {
         console.log("Profile form found.");
@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Profile form not found.");
     }
 
-    // Dynamic Skill Adding Feature
+    // Dynamic Skill Adding and Removing Feature
     const skillContainer = document.querySelector("#skills_container");
     const skillInput = document.querySelector("#skills_input");
     const addSkillButton = document.querySelector("#add_skill_button");
@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Function to update the hidden input value
         const updateSkillsInput = () => {
-            const skillBadges = skillContainer.querySelectorAll(".badge");
+            const skillBadges = skillContainer.querySelectorAll(".skill-badge");
             const skills = Array.from(skillBadges).map((badge) => badge.textContent.trim());
             skillsHiddenInput.value = skills.join(",");
         };
@@ -118,13 +118,13 @@ document.addEventListener("DOMContentLoaded", () => {
             const skill = skillInput.value.trim();
             if (skill) {
                 const skillTag = document.createElement("span");
-                skillTag.className = "badge bg-primary mx-1";
+                skillTag.className = "badge bg-primary mx-1 skill-badge";
                 skillTag.textContent = skill;
 
                 // Add remove button to each skill tag
                 const removeButton = document.createElement("button");
                 removeButton.type = "button";
-                removeButton.className = "btn-close ms-2";
+                removeButton.className = "btn-close ms-2 remove-skill-btn";
                 removeButton.style.fontSize = "0.8rem";
                 removeButton.addEventListener("click", () => {
                     skillTag.remove();
@@ -137,6 +137,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Clear input and update hidden input
                 skillInput.value = "";
                 updateSkillsInput();
+            }
+        });
+
+        // Allow removing skills dynamically
+        skillContainer.addEventListener("click", (e) => {
+            if (e.target.classList.contains("remove-skill-btn")) {
+                const skillTag = e.target.closest(".skill-badge");
+                if (skillTag) {
+                    skillTag.remove();
+                    updateSkillsInput();
+                }
             }
         });
 

@@ -1,6 +1,55 @@
 {% extends "base.html" %}
 {% block title %}My Network - LinkedIn Clone{% endblock %}
 {% block content %}
-<h2>My Network</h2>
-<p>Welcome to your network page!</p>
+<div class="container mt-5">
+    <h2 class="text-center">My Network</h2>
+
+    <!-- Connections -->
+    <h4 class="mt-4">Connections</h4>
+    {% if connections %}
+    <ul class="list-group">
+        {% for connection in connections %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ connection.name }}
+            <span>{{ connection.email }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>You have no connections yet.</p>
+    {% endif %}
+
+    <!-- Received Requests -->
+    <h4 class="mt-4">Received Connection Requests</h4>
+    {% if received_requests %}
+    <ul class="list-group">
+        {% for user in received_requests %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ user.name }}
+            <form method="POST" action="{{ url_for('accept_request', request_id=user.id) }}">
+                <button class="btn btn-success btn-sm">Accept</button>
+            </form>
+            <form method="POST" action="{{ url_for('decline_request', request_id=user.id) }}">
+                <button class="btn btn-danger btn-sm">Decline</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No received requests.</p>
+    {% endif %}
+
+    <!-- Other Users -->
+    <h4 class="mt-4">Other Users</h4>
+    <ul class="list-group">
+        {% for user in other_users %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ user.name }}
+            <form method="POST" action="{{ url_for('send_request', user_id=user.id) }}">
+                <button class="btn btn-primary btn-sm">Connect</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}

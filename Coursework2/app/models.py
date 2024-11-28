@@ -18,6 +18,12 @@ class User(UserMixin, db.Model):
     github = db.Column(db.String(250), nullable=True)
     twitter = db.Column(db.String(250), nullable=True)
 
+    # Relationships for connections and posts
+    connections = db.relationship('Connection', backref='user', lazy='dynamic', foreign_keys='Connection.user_id')
+    connection_requests_sent = db.relationship('ConnectionRequest', backref='requester', lazy='dynamic', foreign_keys='ConnectionRequest.sender_id')
+    connection_requests_received = db.relationship('ConnectionRequest', backref='receiver', lazy='dynamic', foreign_keys='ConnectionRequest.receiver_id')
+    posts = db.relationship('Post', backref='author', lazy='dynamic')
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password).decode('utf-8')
 
@@ -27,7 +33,8 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return f'<User {self.name}, {self.email}>'
 
-# Connection model
+
+# Connection model (Accepted connections)
 class Connection(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -35,6 +42,18 @@ class Connection(db.Model):
 
     def __repr__(self):
         return f'<Connection {self.user_id} -> {self.connection_id}>'
+
+
+# ConnectionRequest model
+class ConnectionRequest(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    status = db.Column(db.String(20), nullable=False, default="pending")  # pending, accepted, declined
+
+    def __repr__(self):
+        return f'<ConnectionRequest {self.sender_id} -> {self.receiver_id} (status={self.status})>'
+
 
 # Post model
 class Post(db.Model):
@@ -46,6 +65,7 @@ class Post(db.Model):
     def __repr__(self):
         return f'<Post {self.id}, {self.content[:20]}>'
 
+
 # Comment model (Optional: Extendable for posts)
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -56,6 +76,7 @@ class Comment(db.Model):
 
     def __repr__(self):
         return f'<Comment {self.id}, Post {self.post_id}>'
+
 
 # Like model (Optional: Likes for posts)
 class Like(db.Model):

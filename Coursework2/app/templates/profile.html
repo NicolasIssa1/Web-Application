@@ -63,8 +63,9 @@
             </div>
             <div id="skills_container" class="mt-2">
                 {% for skill in skills %}
-                <span class="badge bg-primary mx-1">{{ skill }}
-                    <button type="button" class="btn-close ms-2" style="font-size: 0.8rem;" aria-label="Remove"></button>
+                <span class="badge bg-primary mx-1 skill-badge">
+                    {{ skill }}
+                    <button type="button" class="btn-close ms-2 remove-skill-btn" style="font-size: 0.8rem;" aria-label="Remove"></button>
                 </span>
                 {% endfor %}
             </div>

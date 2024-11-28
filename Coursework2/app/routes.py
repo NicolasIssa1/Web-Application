@@ -4,7 +4,7 @@ from flask import render_template, redirect, url_for, flash, request, current_ap
 from flask_login import login_user, logout_user, login_required, current_user
 from app import app, db
 from app.forms import RegistrationForm, LoginForm, ProfileForm
-from app.models import User
+from app.models import User, Connection, ConnectionRequest, Post
 from PIL import Image
 
 # Allowed extensions for image uploads
@@ -105,11 +105,8 @@ def profile():
         flash("Profile updated successfully!", "success")
         return redirect(url_for("profile"))
 
-    # Ensure existing profile and cover photo are displayed
     profile_pic_url = url_for('static', filename=f'profile_pics/{current_user.profile_pic}') if current_user.profile_pic else None
     cover_photo_url = url_for('static', filename=f'cover_photos/{current_user.cover_photo}') if current_user.cover_photo else None
-
-    # Safely handle skills
     skills = current_user.skills.split(',') if current_user.skills else []
 
     return render_template("profile.html", form=form, user=current_user, profile_pic_url=profile_pic_url, cover_photo_url=cover_photo_url, skills=skills)
@@ -120,19 +117,19 @@ def delete_account():
     if request.method == "POST":
         # Get confirmation text from the form
         confirm_text = request.form.get("confirm_text", "").strip()
-        expected_text = f"Delete-{current_user.name}"  # Expected text to match
+        expected_text = f"Delete-{current_user.name}"
 
         if confirm_text == expected_text:
             try:
                 user = User.query.get(current_user.id)
 
-                # Remove profile picture file if it exists
+                # Remove profile picture if it exists
                 if user.profile_pic:
                     picture_path = os.path.join(current_app.root_path, 'static/profile_pics', user.profile_pic)
                     if os.path.exists(picture_path):
                         os.remove(picture_path)
 
-                # Remove cover photo file if it exists
+                # Remove cover photo if it exists
                 if user.cover_photo:
                     cover_path = os.path.join(current_app.root_path, 'static/cover_photos', user.cover_photo)
                     if os.path.exists(cover_path):
@@ -149,29 +146,70 @@ def delete_account():
 
     return render_template("delete_account.html", user=current_user)
 
-@app.route("/profile/inline_edit", methods=["POST"])
-@login_required
-def inline_edit():
-    """Handle inline edits for user profile fields."""
-    data = request.get_json()
-    field = data.get("field")
-    value = data.get("value")
-
-    if field not in ["name", "bio", "education", "skills", "work_experience"]:
-        return jsonify({"success": False, "message": "Invalid field."}), 400
-
-    try:
-        setattr(current_user, field, value)
-        db.session.commit()
-        return jsonify({"success": True, "message": f"{field} updated successfully!"})
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"success": False, "message": "An error occurred. Please try again later."}), 500
-
-@app.route("/network")
+@app.route("/network", methods=["GET"])
 @login_required
 def network():
-    return render_template("network.html")
+    """Render the network page with connections and requests."""
+    connections = User.query.join(Connection, Connection.connection_id == User.id)\
+        .filter(Connection.user_id == current_user.id).all()
+
+    received_requests = User.query.join(ConnectionRequest, ConnectionRequest.sender_id == User.id)\
+        .filter(ConnectionRequest.receiver_id == current_user.id, ConnectionRequest.status == "pending").all()
+
+    sent_requests = User.query.join(ConnectionRequest, ConnectionRequest.receiver_id == User.id)\
+        .filter(ConnectionRequest.sender_id == current_user.id, ConnectionRequest.status == "pending").all()
+
+    other_users = User.query.filter(User.id != current_user.id).all()
+
+    return render_template("network.html", connections=connections,
+                           received_requests=received_requests,
+                           sent_requests=sent_requests,
+                           other_users=other_users)
+
+@app.route("/send_request/<int:user_id>", methods=["POST"])
+@login_required
+def send_request(user_id):
+    """Send a connection request."""
+    existing_request = ConnectionRequest.query.filter_by(sender_id=current_user.id, receiver_id=user_id).first()
+    if existing_request:
+        flash("Connection request already sent.", "info")
+        return redirect(url_for("network"))
+
+    new_request = ConnectionRequest(sender_id=current_user.id, receiver_id=user_id)
+    db.session.add(new_request)
+    db.session.commit()
+    flash("Connection request sent!", "success")
+    return redirect(url_for("network"))
+
+@app.route("/accept_request/<int:request_id>", methods=["POST"])
+@login_required
+def accept_request(request_id):
+    """Accept a connection request."""
+    connection_request = ConnectionRequest.query.filter_by(id=request_id, receiver_id=current_user.id).first()
+    if connection_request:
+        connection_request.status = "accepted"
+        new_connection = Connection(user_id=current_user.id, connection_id=connection_request.sender_id)
+        reverse_connection = Connection(user_id=connection_request.sender_id, connection_id=current_user.id)
+        db.session.add(new_connection)
+        db.session.add(reverse_connection)
+        db.session.commit()
+        flash("Connection request accepted.", "success")
+    else:
+        flash("Invalid connection request.", "danger")
+    return redirect(url_for("network"))
+
+@app.route("/decline_request/<int:request_id>", methods=["POST"])
+@login_required
+def decline_request(request_id):
+    """Decline a connection request."""
+    connection_request = ConnectionRequest.query.filter_by(id=request_id, receiver_id=current_user.id).first()
+    if connection_request:
+        connection_request.status = "declined"
+        db.session.commit()
+        flash("Connection request declined.", "info")
+    else:
+        flash("Invalid connection request.", "danger")
+    return redirect(url_for("network"))
 
 @app.route('/jobs')
 @login_required
